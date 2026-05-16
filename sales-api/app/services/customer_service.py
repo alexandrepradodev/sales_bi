@@ -1,4 +1,4 @@
-from datetime import datetime
+from app.repositories.customer_repository import get_customers_data
 from typing import Optional
 
 def get_all_customers(
@@ -8,22 +8,7 @@ def get_all_customers(
         page: int = 1,
         limit: int = 10
         ):
-    customers = [
-         {
-            "customer_id": 1, 
-            "first_name": "Alexandre",
-            "last_name": "Prado",
-            "email": "alexandrecarprado@gmail.com",
-            "created_at": datetime.now()
-            },
-            {
-            "customer_id": 2, 
-            "first_name": "Lucas",
-            "last_name": "Costa",
-            "email": "lucasc2000@gmail.com",
-            "created_at": datetime.now()
-            }
-    ]
+    customers = get_customers_data
 
     if first_name:
         customers = [

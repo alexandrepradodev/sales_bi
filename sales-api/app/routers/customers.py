@@ -38,21 +38,11 @@ def get_customers(
             status_code=400,
             detail=f"Invalid sort order: {sort_order}"
         )
-
-    if sort_by:
-        customers = sorted(
-            customers,
-            key=lambda customer: customer[sort_by],
-            reverse=sort_order == "desc"
-        )
-
-    if page < 1:
-        page = 1
-
-    if limit is not None:
-        return customers[:limit]
     
-    start = (page - 1) * limit
-    end = start + limit
-
-    return customers[start:end]
+    return get_all_customers(
+        first_name=first_name,
+        sort_by=sort_by,
+        sort_order=sort_order,
+        page=page,
+        limit=limit
+    )
