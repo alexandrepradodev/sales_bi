@@ -1,7 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
+from datetime import datetime
 
 class Customer(BaseModel):
     customer_id: int
-    name: str
-    email: str
-    phone: str
+    first_name: str
+    last_name: str
+    email: EmailStr
+    created_at: datetime
