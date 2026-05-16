@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from app.schemas.customer import Customer
 from app.services.customer_service import get_all_customers
 from typing import Optional
@@ -7,8 +7,8 @@ router = APIRouter()
 
 @router.get("/customers", response_model=list[Customer])
 def get_customers(
-    page: int = 1,
-    limit: int = 10, 
+    page: int = Query(1, ge=1),
+    limit: int = Query(10, ge=1, le=100),  
     first_name: Optional[str] = None,
     sort_by: Optional[str] = None,
     sort_order: str = "asc"
