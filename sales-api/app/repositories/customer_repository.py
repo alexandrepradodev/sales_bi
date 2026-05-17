@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 from app.models.customer_model import CustomerModel
-from app.schemas.customer import CustomerCreate
+from app.schemas.customer import (CustomerCreate, CustomerUpdate)
 
 def create_customer(db: Session, customer: CustomerCreate):
 
@@ -41,3 +41,18 @@ def delete_customer(
     db.delete(customer)
 
     db.commit()
+
+def update_customer(
+        db: Session,
+        customer: CustomerModel,
+        customer_data: CustomerUpdate
+):
+    customer.first_name = customer_data.first_name
+    customer.last_name = customer_data.last_name
+    customer.email = customer_data.email
+
+    db.commit()
+
+    db.refresh(customer)
+
+    return customer

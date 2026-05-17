@@ -2,9 +2,9 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from app.repositories.customer_repository import get_customers_data
-from app.schemas.customer import CustomerCreate
+from app.schemas.customer import (CustomerCreate, CustomerUpdate)
 from app.repositories.customer_repository import create_customer
-from app.repositories.customer_repository import (get_customer_by_id, delete_customer)
+from app.repositories.customer_repository import (get_customer_by_id, delete_customer, update_customer)
 
 def create_new_customer(
         db: Session,
@@ -67,4 +67,22 @@ def remove_customer(
     )
 
     return customer
+
+def update_existing_customer(
+        db: Session,
+        customer_id: int,
+        customer_data: CustomerUpdate
+):
+    customer = get_customer_by_id(
+        db=db,
+        customer_id=customer_id
+    )
+    if not customer:
+        return None
+    
+    return update_customer(
+        db=db,
+        customer=customer,
+        customer_data=customer_data
+    )
         

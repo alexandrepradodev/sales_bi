@@ -5,9 +5,9 @@ from sqlalchemy.orm import Session
 
 from app.schemas.customer import Customer, CustomerCreate
 from app.database.database import get_db
-from app.schemas.customer import CustomerCreate
+from app.schemas.customer import (CustomerCreate, CustomerUpdate)
 from app.services.customer_service import create_new_customer, get_all_customers
-from app.services.customer_service import (get_customer, remove_customer)
+from app.services.customer_service import (get_customer, remove_customer, update_existing_customer)
 
 
 router = APIRouter()
@@ -93,3 +93,21 @@ def delete_customer_route(
             status_code=404,
             detail="Cliente não encontrado na base de dados"
         )
+    
+@router.put("/customers/{customer_id}", response_model=Customer)
+def update_customer_route(
+    customer_id: int,
+    customer_data: CustomerUpdate,
+    db: Session = Depends(get_db)
+):
+    customer = update_existing_customer(
+        db=db,
+        customer_id=customer_id,
+        customer_data=customer_data
+    )
+    if not customer:
+        raise HTTPException(
+            status_code=404,
+            detail="Cliente não encontrado na base de dados"
+        )
+    return customer
