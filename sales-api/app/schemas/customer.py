@@ -8,6 +8,9 @@ class Customer(BaseModel):
     email: EmailStr
     created_at: datetime
 
+    class Config:
+        from_attributes = True
+
 class CustomerCreate(BaseModel):
     first_name: str
     last_name: str
