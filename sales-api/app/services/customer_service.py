@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.repositories.customer_repository import get_customers_data
 from app.schemas.customer import CustomerCreate
 from app.repositories.customer_repository import create_customer
+from app.repositories.customer_repository import get_customer_by_id
 
 def create_new_customer(
         db: Session,
@@ -39,3 +40,12 @@ def get_all_customers(
     end = start + limit
 
     return customers[start:end]
+
+def get_customer(
+        db: Session,
+        customer_id: int
+):
+    return get_customer_by_id(
+        db=db,
+        customer_id=customer_id
+    )

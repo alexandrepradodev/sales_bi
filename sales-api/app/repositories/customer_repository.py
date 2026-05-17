@@ -23,3 +23,13 @@ def create_customer(db: Session, customer: CustomerCreate):
 
 def get_customers_data(db: Session):
     return db.query(CustomerModel).all()
+
+def get_customer_by_id(
+        db: Session,
+        customer_id: int
+):
+    return (
+        db.query(CustomerModel)
+        .filter(CustomerModel.customer_id == customer_id)
+        .first()
+    )

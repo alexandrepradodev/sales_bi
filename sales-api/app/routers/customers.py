@@ -7,6 +7,7 @@ from app.schemas.customer import Customer, CustomerCreate
 from app.database.database import get_db
 from app.schemas.customer import CustomerCreate
 from app.services.customer_service import create_new_customer, get_all_customers
+from app.services.customer_service import get_customer
 
 
 router = APIRouter()
@@ -54,6 +55,22 @@ def get_customers(
         page=page,
         limit=limit
     )
+
+@router.get("/customers/{customer_id}", response_model=Customer)
+def get_customer_by_id_route(
+    customer_id: int,
+    db: Session = Depends(get_db)
+):
+    customer = get_customer(
+        db=db,
+        customer_id=customer_id
+    )
+    if not customer:
+        raise HTTPException(
+            status_code=404,
+            detail="Cliente não encontrado"
+        )
+    return customer
 
 @router.post("/customers", response_model=Customer)
 def create_customer_route(
