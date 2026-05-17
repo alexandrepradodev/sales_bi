@@ -3,11 +3,10 @@ from typing import Optional
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
-from app.schemas.customer import Customer
-from app.services.customer_service import get_all_customers
+from app.schemas.customer import Customer, CustomerCreate
 from app.database.database import get_db
 from app.schemas.customer import CustomerCreate
-from app.services.customer_service import create_new_customer
+from app.services.customer_service import create_new_customer, get_all_customers
 
 
 router = APIRouter()
@@ -18,9 +17,10 @@ def get_customers(
     limit: int = Query(10, ge=1, le=100),  
     first_name: Optional[str] = None,
     sort_by: Optional[str] = None,
-    sort_order: str = "asc"
+    sort_order: str = "asc",
+    db: Session = Depends(get_db)
 ):
-    customers = get_all_customers(first_name=first_name)
+    customers = get_all_customers(first_name=first_name, db=db)
 
     allowed_sort_fields = [
         "first_name",
@@ -47,6 +47,7 @@ def get_customers(
         )
     
     return get_all_customers(
+        db=db,
         first_name=first_name,
         sort_by=sort_by,
         sort_order=sort_order,
@@ -59,4 +60,4 @@ def create_customer_route(
     customer: CustomerCreate,
     db: Session = Depends(get_db)
 ):
-    return create_new_customer(db, customer)
+    return create_new_customer(db=db, customer=customer)
