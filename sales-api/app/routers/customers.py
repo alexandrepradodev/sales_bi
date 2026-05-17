@@ -7,7 +7,7 @@ from app.schemas.customer import Customer, CustomerCreate
 from app.database.database import get_db
 from app.schemas.customer import CustomerCreate
 from app.services.customer_service import create_new_customer, get_all_customers
-from app.services.customer_service import get_customer
+from app.services.customer_service import (get_customer, remove_customer)
 
 
 router = APIRouter()
@@ -78,3 +78,18 @@ def create_customer_route(
     db: Session = Depends(get_db)
 ):
     return create_new_customer(db=db, customer=customer)
+
+@router.delete("/customers/{customer_id}", status_code=204)
+def delete_customer_route(
+    customer_id: int,
+    db: Session = Depends(get_db)
+):
+    customer = remove_customer(
+        db=db,
+        customer_id=customer_id
+    )
+    if not customer:
+        raise HTTPException(
+            status_code=404,
+            detail="Cliente não encontrado na base de dados"
+        )

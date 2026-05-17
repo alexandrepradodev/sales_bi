@@ -33,3 +33,11 @@ def get_customer_by_id(
         .filter(CustomerModel.customer_id == customer_id)
         .first()
     )
+
+def delete_customer(
+        db: Session,
+        customer: CustomerModel
+):
+    db.delete(customer)
+
+    db.commit()
