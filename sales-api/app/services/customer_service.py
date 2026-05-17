@@ -1,5 +1,16 @@
-from app.repositories.customer_repository import get_customers_data
 from typing import Optional
+from sqlalchemy.orm import Session
+
+from app.repositories.customer_repository import get_customers_data
+from app.schemas.customer import CustomerCreate
+from app.repositories.customer_repository import create_customer
+
+def create_new_customer(
+        db: Session,
+        customer: CustomerCreate
+):
+    return create_customer(db, customer)
+
 
 def get_all_customers(
         first_name: Optional[str] = None,
@@ -8,7 +19,7 @@ def get_all_customers(
         page: int = 1,
         limit: int = 10
         ):
-    customers = get_customers_data
+    customers = get_customers_data()
 
     if first_name:
         customers = [

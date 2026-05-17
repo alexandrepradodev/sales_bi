@@ -7,3 +7,8 @@ class Customer(BaseModel):
     last_name: str
     email: EmailStr
     created_at: datetime
+
+class CustomerCreate(BaseModel):
+    first_name: str
+    last_name: str
+    email: EmailStr

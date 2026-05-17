@@ -1,7 +1,14 @@
 from fastapi import APIRouter, HTTPException, Query
+from typing import Optional
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
 from app.schemas.customer import Customer
 from app.services.customer_service import get_all_customers
-from typing import Optional
+from app.database.database import get_db
+from app.schemas.customer import CustomerCreate
+from app.services.customer_service import create_new_customer
+
 
 router = APIRouter()
 
@@ -46,3 +53,10 @@ def get_customers(
         page=page,
         limit=limit
     )
+
+@router.post("/customers", response_model=Customer)
+def create_customer_route(
+    customer: CustomerCreate,
+    db: Session = Depends(get_db)
+):
+    return create_new_customer(db, customer)
