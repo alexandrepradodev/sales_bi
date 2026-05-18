@@ -1,5 +1,6 @@
 from datetime import datetime
 from sqlalchemy.orm import Session
+from sqlalchemy import asc, desc
 
 from app.models.customer_model import CustomerModel
 from app.schemas.customer import (CustomerCreate, CustomerUpdate)
@@ -21,9 +22,36 @@ def create_customer(db: Session, customer: CustomerCreate):
     return db_customer
 
 
-def get_customers_data(db: Session):
-    return db.query(CustomerModel).all()
+def get_customers_data(
+        db: Session,
+        first_name: str = None,
+        sort_by: str = None,
+        sort_order: str = "asc",
+        page: int = 1,
+        limit: int = 10
+        ):
+    query = db.query(CustomerModel)
 
+    if first_name:
+        query = query.filter(
+            CustomerModel.first_name.ilike(f"{first_name}")
+        )
+
+    if sort_by:
+        column = getattr(CustomerModel, sort_by)
+
+        if sort_order == "desc":
+            query = query.order_by(desc(column))
+
+        else:
+            query = query.order_by(asc(column))
+    
+    start = (page - 1) * limit
+
+    query = query.offset(start).limit(limit)
+
+    return query.all()
+    
 def get_customer_by_id(
         db: Session,
         customer_id: int

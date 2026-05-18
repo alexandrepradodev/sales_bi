@@ -26,7 +26,7 @@ def get_all_customers(
     if first_name:
         customers = [
             customer for customer in customers
-            if customer.fist_name.lower() == first_name.lower()
+            if customer.first_name.lower() == first_name.lower()
         ]
 
     if sort_by:
